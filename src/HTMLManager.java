@@ -5,17 +5,29 @@ public class HTMLManager {
     private Queue<HTMLTag> tags;
 
     // TODO: Add Javadoc here and complete method
+    /**
+     * This method assigns the html queue reference to the queue instance field
+     * @param html is the queue
+     */
     public HTMLManager(Queue<HTMLTag> html){
 
         // TODO: throw exception
-
+        if (tags == null) {
+            throw new IllegalArgumentException();
+        }
+        else {
         // shallow copy
         tags = html;
+        }
     }
 
     //TODO: Add Javadoc here and complete method
+    /**
+     * Returns the queue of HTMLTags being managed
+     * @return the queue tags
+     */
     Queue<HTMLTag> getTags(){
-        return null;
+        return tags;
     }
 
     //TODO: Add Javadoc here and complete method
@@ -24,9 +36,17 @@ public class HTMLManager {
     }
 
     //TODO: Add Javadoc here and complete method
+    /**
+     * This method creates a string representation for the tags
+     * @return the queue in the format
+     */
     public String toString(){
-        return "finish me";
+        Iterator<String> it = tags.iterator();
+        
+        while (it.hasNext()) {
+            
+        }
+        return sb.toString();
     }
-
 }
 
