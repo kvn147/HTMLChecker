@@ -1,6 +1,12 @@
 import java.util.*;
 
 // TODO: Add Javadoc here
+/**
+ * This class will check if it is null, get the tags, 
+ * fix the text to correct HTML format, and create a toString represenation of it.
+ * 
+ * @author: Kevin Nguyen
+ */
 public class HTMLManager {
     private Queue<HTMLTag> tags;
 
