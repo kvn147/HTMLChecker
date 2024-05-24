@@ -1,10 +1,10 @@
 import java.util.*;
+import java.lang.*;
 
-// TODO: Add Javadoc here
 /**
  * This class will check if it is null, get the tags, 
- * fix the text to correct HTML format, and create a toString represenation of it.
- * 
+ * fix the text to correct HTML format, and create a toString representation of it.
+ *
  * @author: Kevin Nguyen
  */
 public class HTMLManager {
@@ -16,13 +16,12 @@ public class HTMLManager {
      */
     public HTMLManager(Queue<HTMLTag> html){
 
-        // TODO: throw exception
-        if (tags == null) {
+        if (html == null) {
             throw new IllegalArgumentException();
         }
         else {
-        // shallow copy
-        tags = html;
+            // shallow copy
+            tags = html;
         }
     }
 
@@ -34,39 +33,46 @@ public class HTMLManager {
         return tags;
     }
 
-    //TODO: Add Javadoc here and complete method
     /**
      * This method will fix tags to be in the corrected HTML format
      */
     public void fixHTML(){
-        Stack<String> stack = new Stack<>();
+        Stack<HTMLTag> stack = new Stack<>();
 
-        while(!tags.isEmpty()) {
+        // loops through original queue size
+        for (int i = 0; i < tags.size(); i++) {
+            HTMLTag currentTag = tags.remove();
+
             // Opening tags add to stack AND to back of queue
-            if (!tags.peek().contains("/")) {
-                String removeHead(tags.remove());
-                stack.push(removeHead);
-                tag.add(removeHead);
+            if (currentTag.isOpening()) {
+                stack.push(currentTag);
+                tags.add(currentTag);
             }
-            // Closing tags check if to
-            else if (!tag.peek().contains("/>")) {
-                String check = tag.peek().substring(0, tag.peek.size()-2);
-                if (check == stack.peek()) {
-                    tags.add((tags.remove()));
+            // Closing tags check if the top of stack matches it or not
+            else if (currentTag.isClosing()) {
+                if (!stack.isEmpty() && stack.peek().matches(currentTag)) {
                     stack.pop();
+                    tags.add(currentTag);
                 }
                 else {
-                    String closingTag = stack.pop();
-                    tags.add(addCharToString(closingTag, "/", 1);
+                    if (!stack.isEmpty()) {
+                        HTMLTag missingClosingTag = stack.pop().getMatching();
+                        tags.add(missingClosingTag);
+                    }
+                    else {
+                        tags.remove();
+                    }
                 }
             }
             // Self-closing tags add to back of the queue
-            else if (tag.peek().contains("/>")) {
-                tag.add(tag.remove());
-
+            else if (currentTag.isSelfClosing()) {
+                tags.add(currentTag);
             }
         }
-        
+        while (!stack.isEmpty()) {
+            HTMLTag missingClosingTag = stack.pop().getMatching();
+            tags.add(missingClosingTag);
+        }
     }
 
     /**
@@ -74,10 +80,10 @@ public class HTMLManager {
      * @return the queue in the format
      */
     public String toString(){
-        Iterator<String> it = tags.iterator();
-        
-        while (it.hasNext()) {
-            
+        StringBuilder sb = new StringBuilder();
+
+        for (HTMLTag tag : tags) {
+            sb.append(" ").append(tag.toString());
         }
         return sb.toString();
     }
